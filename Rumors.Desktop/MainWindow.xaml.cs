@@ -2,6 +2,7 @@
 using System.Windows.Controls;
 using Microsoft.Extensions.DependencyInjection;
 using Rumors.Desktop.Common;
+using Rumors.Desktop.Logging;
 using Rumors.Desktop.Pages;
 using Rumors.Desktop.ViewModels;
 
@@ -31,8 +32,9 @@ namespace Rumors.Desktop
             //MainFrame.Navigate(new ProjectListPage());
 
             // ---- PoC ----
+            var logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
             ProgressBarLayer.Visibility = Visibility.Collapsed;
-            MainFrame.Navigate(new PoCLandingPage());
+            MainFrame.Navigate(new PoCLandingPage(logNotifier));
             // ---- PoC ----
 
             _navigator.NavigationService.Navigated += NavigationService_Navigated;

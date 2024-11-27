@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rumors.Desktop.Common;
 using Rumors.Desktop.Common.Messages.MessageHub;
 using Rumors.Desktop.Common.Messages.Serialization;
+using Rumors.Desktop.Logging;
 using Rumors.Desktop.MessageHandlers;
 using Serilog;
 using System.IO;
@@ -32,6 +33,7 @@ namespace Rumors.Desktop
             services.AddSingleton<IPageNavigator, PageNavigator>();
             services.AddSingleton<IMessageHub, MessageHub>();
             services.AddSingleton<IMessageHandlersList, MessageHandlersList>();
+            services.AddSingleton<ILogNotifier, LogNotifier>();
 
 
             ServiceProvider = services.BuildServiceProvider();

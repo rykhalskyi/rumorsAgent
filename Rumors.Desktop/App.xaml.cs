@@ -1,13 +1,14 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Rumors.Desktop.Agent.Logging;
 using Rumors.Desktop.Common.Messages.MessageHub;
 using Rumors.Desktop.Common.Pipes;
+using Rumors.Desktop.Logging;
 using Rumors.Desktop.MessageHandlers;
-using Rumors.Desktop.ViewModels;
 using Serilog;
-using System.Configuration;
-using System.IO;
+using Serilog.Events;
+using System.Diagnostics;
 using System.Windows;
 
 namespace Rumors.Desktop
@@ -21,6 +22,7 @@ namespace Rumors.Desktop
         private IMessageHub _messageHub;
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private ILogger<App> _logger;
+        private ILogNotifier _logNotifier;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -28,6 +30,7 @@ namespace Rumors.Desktop
             ApplicationEntryPoint.RegisterServices();
             ConfigureLogging();
             _logger = ApplicationEntryPoint.ServiceProvider.GetService<ILogger<App>>()!;
+            _logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
 
             var messageHandlerList = ApplicationEntryPoint.ServiceProvider.GetService<IMessageHandlersList>();
             messageHandlerList!.Initialize();
@@ -60,12 +63,25 @@ namespace Rumors.Desktop
             base.OnExit(e);
         }
 
+        
+
         private void ConfigureLogging()
         {
+            Action<LogEvent> logToUi = logEvent =>
+            {
+                string message = logEvent.RenderMessage();
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    Debug.WriteLine($"Log >> {message}");
+                    _logNotifier.RaiseOnlog(message);
+                });
+            };
+
             var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)
+                .WriteTo.Sink(new UiSink(logToUi))
                 .CreateLogger();
         }
 
