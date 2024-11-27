@@ -13,10 +13,19 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal">
+            <TextBlock Text="Auto Analyze PoC. No Data Base"
+                       TextAlignment="Center"
+                       Margin="10,0"
+                       VerticalAlignment="Center"/>
+            <Button Content="Click"
+                    Height="20"
+                    Width="50"
+                    Click="Button_Click"
+                    />
+        </StackPanel>
         
-        <TextBlock Text="Auto Analyze PoC. No Data Base"
-                   TextAlignment="Center"
-                   VerticalAlignment="Center"/>
         <RichTextBox x:Name="logRtichTextBox"
                      Grid.Row="1"
                      VerticalScrollBarVisibility="Auto"

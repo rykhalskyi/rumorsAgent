@@ -1,6 +1,9 @@
-﻿using Rumors.Desktop.Logging;
+﻿using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Rumors.Desktop.Logging;
 using System.Windows.Controls;
 using System.Windows.Documents;
+using System.Windows.Media;
 
 namespace Rumors.Desktop.Pages
 {
@@ -9,21 +12,36 @@ namespace Rumors.Desktop.Pages
     /// </summary>
     public partial class PoCLandingPage : Page
     {
-        public PoCLandingPage(ILogNotifier logNotifier)
+        ILogger<PoCLandingPage> _logger;
+        public PoCLandingPage()
         {
             InitializeComponent();
+            var logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
             logNotifier.OnLog += OnLog;
+
+            _logger = ApplicationEntryPoint.ServiceProvider.GetService<ILogger<PoCLandingPage>>()!;
 
         }
 
         private void OnLog(string obj)
         {
-            AddLog(obj);
+            var date = DateTime.Now;
+            AddLog($"Log >> {date.ToString()}  {obj}");
         }
 
         public void AddLog(string message)
         {
-            logRtichTextBox.Document.Blocks.Add(new Paragraph(new Run(message)));
+            var run = new Run(message); //Fix it
+            run.Foreground = Brushes.Red;
+            
+            var paragraph = new Paragraph();
+            paragraph.Inlines.Add(new Run(message));
+            logRtichTextBox.Document.Blocks.Add(paragraph);
+        }
+
+        private void Button_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            _logger.LogInformation("Click click");
         }
     }
 }

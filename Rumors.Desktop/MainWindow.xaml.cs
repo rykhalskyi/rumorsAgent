@@ -34,7 +34,7 @@ namespace Rumors.Desktop
             // ---- PoC ----
             var logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
             ProgressBarLayer.Visibility = Visibility.Collapsed;
-            MainFrame.Navigate(new PoCLandingPage(logNotifier));
+            MainFrame.Navigate(new PoCLandingPage());
             // ---- PoC ----
 
             _navigator.NavigationService.Navigated += NavigationService_Navigated;
