@@ -1,0 +1,32 @@
+﻿<Window x:Class="Rumors.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="Rumors Agent Desktop PoC" Height="650" Width="1000">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Styles.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid>
+        <Grid Panel.ZIndex="2" x:Name="ProgressBarLayer">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="20"/>
+            </Grid.RowDefinitions>
+            <Rectangle Fill="#99FFFFFF"/>
+            <ProgressBar Grid.Row="1"
+                         IsIndeterminate="True"/>
+        </Grid>
+
+     
+        <Frame x:Name="MainFrame"
+               Panel.ZIndex="1"
+               NavigationUIVisibility="Hidden"/>
+    </Grid>
+</Window>
