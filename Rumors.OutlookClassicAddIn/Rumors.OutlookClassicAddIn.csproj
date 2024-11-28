@@ -290,30 +290,6 @@
     <Compile Include="emailLogic\EmailUtils.cs" />
     <Compile Include="emailLogic\ToDtoConverter.cs" />
     <Compile Include="etc\EmailTaskPaneStatus.cs" />
-    <Compile Include="Panes\AddLogDialogForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panes\AddLogDialogForm.Designer.cs">
-      <DependentUpon>AddLogDialogForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Panes\AutoRecognizePane.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Panes\AutoRecognizePane.Designer.cs">
-      <DependentUpon>AutoRecognizePane.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Panes\ProjectsPane.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Panes\ProjectsPane.Designer.cs">
-      <DependentUpon>ProjectsPane.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Panes\AddPersonForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Panes\AddPersonForm.Designer.cs">
-      <DependentUpon>AddPersonForm.cs</DependentUpon>
-    </Compile>
     <Compile Include="Panes\BasePaneUserControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -331,37 +307,16 @@
     </Compile>
     <Compile Include="Panes\IPaneUserControl.cs" />
     <Compile Include="Panes\ITaskPanes.cs" />
-    <Compile Include="Panes\LogListTaskPane.cs">
-      <SubType>UserControl</SubType>
-    </Compile>
-    <Compile Include="Panes\LogListTaskPane.Designer.cs">
-      <DependentUpon>LogListTaskPane.cs</DependentUpon>
-    </Compile>
     <Compile Include="Panes\TaskPane.cs" />
     <Compile Include="Panes\TaskPanes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
-    <EmbeddedResource Include="Panes\AddLogDialogForm.resx">
-      <DependentUpon>AddLogDialogForm.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panes\AutoRecognizePane.resx">
-      <DependentUpon>AutoRecognizePane.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panes\ProjectsPane.resx">
-      <DependentUpon>ProjectsPane.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panes\AddPersonForm.resx">
-      <DependentUpon>AddPersonForm.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Panes\GetStatusPane.resx">
       <DependentUpon>GetStatusPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Panes\InfoTaskPane.resx">
       <DependentUpon>InfoTaskPane.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Panes\LogListTaskPane.resx">
-      <DependentUpon>LogListTaskPane.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

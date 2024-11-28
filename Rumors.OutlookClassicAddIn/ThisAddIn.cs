@@ -5,11 +5,9 @@ using Rumors.Desktop.Common.Messages.Serialization;
 using Rumors.Desktop.Common.Pipes;
 using Microsoft.Extensions.Configuration;
 using Serilog;
-using System.IO;
 using System;
 using System.Windows;
 using System.Threading.Tasks;
-using Rumors.Desktop.Common.Dto;
 
 
 
@@ -34,19 +32,6 @@ namespace Rumors.OutlookClassicAddIn
             PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
 
         }
-
-        //private void Email_SelectionChange()
-        //{
-        //    try
-        //    {
-        //        EmailChaged();
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Log.Error(ex, "EmailChanged");
-        //    }
-        //}
-
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             Log.Error(e.Exception, "Unobserved task exception.");

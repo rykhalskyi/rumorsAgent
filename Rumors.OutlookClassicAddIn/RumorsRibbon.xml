@@ -2,14 +2,10 @@
 <customUI xmlns="http://schemas.microsoft.com/office/2009/07/customui" onLoad="Ribbon_Load">
   <ribbon>
     <tabs>
-      <tab id="RumorsTab" label="Rumors">
+      <tab id="RumorsTab" label="Rumors Agent">
         <group id="MyGroup"
                label="Rumors">
-			<!--<button id="btnAddLog" label="Add Log" size="large" onAction="OnButtonClick" imageMso="NewNote"/>-->
-			<button id="btnAuto" label="Auto PoC" size="large" onAction="OnButtonClick" imageMso="RefreshStatus"/>
-			<!--<button id="btnShowLog" label="Email Info" size="large" onAction="OnButtonClick" imageMso="CreateMailRule"/>
-			<button id="btnProjects" label="Projects" size="large" onAction="OnButtonClick" imageMso="FolderPropertiesContext"/>
-			<button id="btnGetStatus" label="Ask AI" size="large" onAction="OnButtonClick" imageMso="RefreshStatus"/>-->
+			<button id="btnGetStatus" label="Ask AI" size="large" onAction="OnButtonClick" imageMso="RefreshStatus"/>
         </group>
 		<group id="Develop" label="Dev tools">
 			<button id="btnShowInfo" label="Show Info" size="large" onAction="OnButtonClick" imageMso="ZoomOnePage"/>

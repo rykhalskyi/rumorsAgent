@@ -18,32 +18,18 @@ namespace Rumors.OutlookClassicAddIn
 
         public void OnButtonClick(Office.IRibbonControl control)
         {
-            if (control.Id.Equals("btnProjects"))
-            {
-                ThisAddIn.TaskPanes.TogglePane<ProjectsPane>();
-            }
 
             if (control.Id.Equals("btnShowInfo"))
             {
                 ThisAddIn.TaskPanes.TogglePane<InfoTaskPane>();
             }
 
-            if (control.Id.Equals("btnShowLog"))
-            {
-                ThisAddIn.TaskPanes.TogglePane<LogListTaskPane>();
-            }
 
             if (control.Id.Equals("btnGetStatus"))
             {
                 ThisAddIn.TaskPanes.TogglePane<GetStatusPane>();
             }
 
-            switch (control.Id)
-            {
-                case "btnAuto":
-                    ThisAddIn.TaskPanes.TogglePane<AutoRecognizePane>();
-                break;
-            }
         }
 
         #region IRibbonExtensibility Members
