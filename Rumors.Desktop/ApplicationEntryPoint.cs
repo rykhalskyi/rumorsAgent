@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Rumors.Desktop.Common;
 using Rumors.Desktop.Common.Messages.MessageHub;
 using Rumors.Desktop.Common.Messages.Serialization;
+using Rumors.Desktop.Common.Pipes;
 using Rumors.Desktop.Logging;
 using Rumors.Desktop.MessageHandlers;
 using Serilog;
@@ -34,6 +35,7 @@ namespace Rumors.Desktop
             services.AddSingleton<IMessageHub, MessageHub>();
             services.AddSingleton<IMessageHandlersList, MessageHandlersList>();
             services.AddSingleton<IChatNotifier, LogNotifier>();
+            services.AddSingleton<PipeClient>(c => new PipeClient(PipeConsts.ReversedPipeName, ex => { }));
 
 
             ServiceProvider = services.BuildServiceProvider();

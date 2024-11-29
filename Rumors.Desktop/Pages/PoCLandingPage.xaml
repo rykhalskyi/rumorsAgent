@@ -15,7 +15,7 @@
         </Grid.RowDefinitions>
 
         <StackPanel Orientation="Horizontal">
-            <TextBlock Text="Auto Analyze PoC. No Data Base"
+            <TextBlock Text="Agent PoC. No Data Base"
                        TextAlignment="Center"
                        Margin="10,0"
                        VerticalAlignment="Center"/>
@@ -23,6 +23,12 @@
                     Height="20"
                     Width="50"
                     Click="Button_Click"
+                    />
+            <Button Content="Click 2"
+                Height="20"
+                Width="50"
+                    Margin="10,0"
+                    Click="Button_Click_2"
                     />
         </StackPanel>
         

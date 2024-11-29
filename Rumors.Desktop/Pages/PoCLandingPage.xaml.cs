@@ -1,5 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Rumors.Desktop.Common.Messages;
+using Rumors.Desktop.Common.Pipes;
 using Rumors.Desktop.Logging;
 using System.Windows;
 using System.Windows.Controls;
@@ -14,6 +16,7 @@ namespace Rumors.Desktop.Pages
     public partial class PoCLandingPage : Page
     {
         ILogger<PoCLandingPage> _logger;
+        PipeClient _pipeClient;
         public PoCLandingPage()
         {
             InitializeComponent();
@@ -24,7 +27,7 @@ namespace Rumors.Desktop.Pages
             logNotifier.OnAgentMessage += AddAgentMessage;
 
             _logger = ApplicationEntryPoint.ServiceProvider.GetService<ILogger<PoCLandingPage>>()!;
-
+            _pipeClient = ApplicationEntryPoint.ServiceProvider.GetService<PipeClient>()!;
         }
 
         private void OnLog(string obj)
@@ -85,6 +88,13 @@ namespace Rumors.Desktop.Pages
         private void RunSafe(Action action)
         {
             Application.Current.Dispatcher.Invoke(action);
+        }
+
+        private  void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            var toolResponse =  _pipeClient.Send(new ToolMessage { Text = "Tool request" });
+            if (toolResponse is ToolMessage message)
+                AddLog($"Get tool response: {message.Text}");
         }
     }
 }

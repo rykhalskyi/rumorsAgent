@@ -45,8 +45,10 @@ namespace Rumors.OutlookClassicAddIn.Panes
                 var response = ThisAddIn.PipeClient.Send(new ChatMessage { Text = txt_Input.Text });
                 if (response is ChatMessage message)
                 {
-                    txt_Chat.Text = $"[Agent:] {message.Text}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
-                    txt_Input.Text = string.Empty;
+                    RunSafe(() => { 
+                        txt_Chat.Text = $"[Agent:] {message.Text}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
+                        txt_Input.Text = string.Empty;
+                    });
                 }
             });
 

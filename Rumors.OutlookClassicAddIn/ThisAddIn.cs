@@ -8,6 +8,11 @@ using Serilog;
 using System;
 using System.Windows;
 using System.Threading.Tasks;
+using System.Threading;
+using Serilog.Core;
+using System.Windows.Forms;
+using Microsoft.Extensions.Logging;
+using Rumors.OutlookClassicAddIn.MessageHandlers;
 
 
 
@@ -20,6 +25,12 @@ namespace Rumors.OutlookClassicAddIn
         public static RumorsRibbon Ribbon { get; private set; }
         public static PipeClient PipeClient { get; private set; }
 
+        private static PipeServer _pipeServer;
+        private CancellationTokenSource _cts = new CancellationTokenSource();
+
+        private ILoggerFactory _loggerFactory;
+        private ILogger<ThisAddIn> _logger;
+
         private void ThisAddIn_Startup(object sender, System.EventArgs e)
         {
             CreateLogger();
@@ -29,9 +40,18 @@ namespace Rumors.OutlookClassicAddIn
 
             TaskPanes = new TaskPanes();
             MessageHub = new MessageHub(new MessageSerializer());
-            PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
+            MessageHub.AddHandler(new ToolMessageHandler());
 
+            PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
+            _pipeServer = new PipeServer(PipeConsts.ReversedPipeName);
+            _pipeServer.Start(OnMessage, _cts.Token, _logger);
         }
+
+        private async Task<string> OnMessage(string message)
+        {
+            return await MessageHub.Handle(message);
+        }
+
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)
         {
             Log.Error(e.Exception, "Unobserved task exception.");
@@ -54,7 +74,7 @@ namespace Rumors.OutlookClassicAddIn
             }
             catch (Exception ex)
             {
-                MessageBox.Show(ex.ToString(), "Log Creating Exception");
+                System.Windows.MessageBox.Show(ex.ToString(), "Log Creating Exception");
             }
         }
 
@@ -97,7 +117,10 @@ namespace Rumors.OutlookClassicAddIn
 
         private void ConfigureLogging(IConfiguration configuration)
         {
-           
+            _loggerFactory = new LoggerFactory();
+            _loggerFactory.AddSerilog();
+
+            _logger = _loggerFactory.CreateLogger<ThisAddIn>();
 
             Log.Logger = new LoggerConfiguration()
                 .ReadFrom.Configuration(configuration)

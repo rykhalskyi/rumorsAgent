@@ -9,12 +9,18 @@ namespace Rumors.Desktop.Common.Pipes
 {
     public class PipeServer
     {
+        private readonly string _name;
         private Thread _serverThread;
         private NamedPipeServerStream _serverStream;
         private bool _running;
         private Func<string, Task<string>> _onMessage;
         private ILogger _logger;
-        
+
+        public PipeServer(string name)
+        {
+            _name = name;
+        }
+
         public void Start(Func<string, Task<string>> onMessage,
             CancellationToken cancellationToken,
             ILogger logger)
@@ -40,7 +46,7 @@ namespace Rumors.Desktop.Common.Pipes
             while (_running)
             {
                 _serverStream =
-                        new NamedPipeServerStream(PipeConsts.PipeName, PipeDirection.InOut);
+                        new NamedPipeServerStream(_name, PipeDirection.InOut);
                     await _serverStream.WaitForConnectionAsync(cancellationToken);
 
                 try

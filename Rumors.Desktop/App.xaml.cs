@@ -18,7 +18,7 @@ namespace Rumors.Desktop
     /// </summary>
     public partial class App : Application
     {
-        private PipeServer _pipeServer = new PipeServer();
+        private PipeServer _pipeServer = new PipeServer(PipeConsts.PipeName);
         private IMessageHub _messageHub;
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private ILogger<App> _logger;
