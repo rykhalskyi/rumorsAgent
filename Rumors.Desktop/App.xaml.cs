@@ -22,7 +22,7 @@ namespace Rumors.Desktop
         private IMessageHub _messageHub;
         private CancellationTokenSource _cts = new CancellationTokenSource();
         private ILogger<App> _logger;
-        private ILogNotifier _logNotifier;
+        private IChatNotifier _logNotifier;
 
         protected override void OnStartup(StartupEventArgs e)
         {
@@ -30,7 +30,7 @@ namespace Rumors.Desktop
             ApplicationEntryPoint.RegisterServices();
             ConfigureLogging();
             _logger = ApplicationEntryPoint.ServiceProvider.GetService<ILogger<App>>()!;
-            _logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
+            _logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<IChatNotifier>()!;
 
             var messageHandlerList = ApplicationEntryPoint.ServiceProvider.GetService<IMessageHandlersList>();
             messageHandlerList!.Initialize();

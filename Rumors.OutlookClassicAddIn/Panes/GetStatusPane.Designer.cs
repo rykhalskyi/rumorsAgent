@@ -30,8 +30,8 @@
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txt_Chat = new System.Windows.Forms.TextBox();
-            this.btn_AskAi = new System.Windows.Forms.Button();
-            this.txt_Question = new System.Windows.Forms.TextBox();
+            this.btn_SendMessage = new System.Windows.Forms.Button();
+            this.txt_Input = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox3.SuspendLayout();
             this.SuspendLayout();
@@ -42,8 +42,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.txt_Chat);
-            this.groupBox3.Controls.Add(this.btn_AskAi);
-            this.groupBox3.Controls.Add(this.txt_Question);
+            this.groupBox3.Controls.Add(this.btn_SendMessage);
+            this.groupBox3.Controls.Add(this.txt_Input);
             this.groupBox3.Location = new System.Drawing.Point(4, 41);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.groupBox3.Name = "groupBox3";
@@ -60,7 +60,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_Chat.Location = new System.Drawing.Point(9, 71);
-            this.txt_Chat.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.txt_Chat.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Chat.Multiline = true;
             this.txt_Chat.Name = "txt_Chat";
             this.txt_Chat.ReadOnly = true;
@@ -68,39 +68,42 @@
             this.txt_Chat.Size = new System.Drawing.Size(313, 626);
             this.txt_Chat.TabIndex = 3;
             // 
-            // btn_AskAi
+            // btn_SendMessage
             // 
-            this.btn_AskAi.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_AskAi.Enabled = false;
-            this.btn_AskAi.Location = new System.Drawing.Point(269, 20);
-            this.btn_AskAi.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_AskAi.Name = "btn_AskAi";
-            this.btn_AskAi.Size = new System.Drawing.Size(55, 34);
-            this.btn_AskAi.TabIndex = 2;
-            this.btn_AskAi.Text = "Send";
-            this.btn_AskAi.UseVisualStyleBackColor = true;
-            this.btn_AskAi.Click += new System.EventHandler(this.btn_AskAi_Click);
+            this.btn_SendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_SendMessage.Enabled = false;
+            this.btn_SendMessage.Location = new System.Drawing.Point(269, 20);
+            this.btn_SendMessage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_SendMessage.Name = "btn_SendMessage";
+            this.btn_SendMessage.Size = new System.Drawing.Size(55, 34);
+            this.btn_SendMessage.TabIndex = 2;
+            this.btn_SendMessage.Text = "Send";
+            this.btn_SendMessage.UseVisualStyleBackColor = true;
+            this.btn_SendMessage.Click += new System.EventHandler(this.btn_AskAi_Click);
             // 
-            // txt_Question
+            // txt_Input
             // 
-            this.txt_Question.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            this.txt_Input.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_Question.Location = new System.Drawing.Point(8, 30);
-            this.txt_Question.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.txt_Question.Name = "txt_Question";
-            this.txt_Question.Size = new System.Drawing.Size(255, 22);
-            this.txt_Question.TabIndex = 0;
+            this.txt_Input.Location = new System.Drawing.Point(8, 30);
+            this.txt_Input.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_Input.Name = "txt_Input";
+            this.txt_Input.Size = new System.Drawing.Size(255, 22);
+            this.txt_Input.TabIndex = 0;
+            this.txt_Input.TextChanged += new System.EventHandler(this.txt_Input_TextChanged);
+            this.txt_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_Input_KeyDown);
             // 
             // progressBar1
             // 
             this.progressBar1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.progressBar1.Location = new System.Drawing.Point(4, 7);
-            this.progressBar1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.progressBar1.Margin = new System.Windows.Forms.Padding(4);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(339, 28);
             this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
             this.progressBar1.TabIndex = 7;
+            this.progressBar1.Visible = false;
             // 
             // GetStatusPane
             // 
@@ -108,7 +111,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.groupBox3);
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(4);
             this.Name = "GetStatusPane";
             this.Size = new System.Drawing.Size(355, 750);
             this.groupBox3.ResumeLayout(false);
@@ -119,8 +122,8 @@
 
         #endregion
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button btn_AskAi;
-        private System.Windows.Forms.TextBox txt_Question;
+        private System.Windows.Forms.Button btn_SendMessage;
+        private System.Windows.Forms.TextBox txt_Input;
         private System.Windows.Forms.TextBox txt_Chat;
         private System.Windows.Forms.ProgressBar progressBar1;
     }

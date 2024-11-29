@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Rumors.Desktop.Common.Messages;
+using System;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -33,29 +34,24 @@ namespace Rumors.OutlookClassicAddIn.Panes
 
         private async void btn_AskAi_Click(object sender, EventArgs e)
         {
-           //RunSafe(()=> progressBar1.Visible = true);
-
-           // btn_AskAi.Enabled = false;
-           // txt_Chat.Text = $"[YOU:] {txt_Question.Text}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
-
-           // var responseText = string.Empty;
-           // await Task.Run(()=>
-           // {
-           //     var response = ThisAddIn.PipeClient.Send(new SendAiRequestMessage()
-           //     {
-           //         Story = txtStory.Text,
-           //         Question = txt_Question.Text,
-           //     });
-           //     if (!(response is SendAiRequestMessage message)) return;
-           //      responseText = RestorePersons(message.Response);
-           // });
-  
-           // txt_Chat.Text = $"[ChatGPT:] {responseText}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
-           // txt_Question.Text = string.Empty;
-            
-           //RunSafe(()=> progressBar1.Visible = false);
+            await SendUserMessage();
         }
 
+        private async Task SendUserMessage()
+        {
+            RunSafe(() => progressBar1.Visible = true);
+            await Task.Run(() =>
+            {
+                var response = ThisAddIn.PipeClient.Send(new ChatMessage { Text = txt_Input.Text });
+                if (response is ChatMessage message)
+                {
+                    txt_Chat.Text = $"[Agent:] {message.Text}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
+                    txt_Input.Text = string.Empty;
+                }
+            });
+
+            RunSafe(() => progressBar1.Visible = false);
+        }
 
         private void RunSafe(Action action)
         {
@@ -66,6 +62,23 @@ namespace Rumors.OutlookClassicAddIn.Panes
             else
             {
                 action();
+            }
+        }
+
+        private void txt_Input_TextChanged(object sender, EventArgs e)
+        {
+            btn_SendMessage.Enabled = !string.IsNullOrWhiteSpace(txt_Input.Text);
+        }
+
+        private async void txt_Input_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                e.SuppressKeyPress = true;
+
+                if (!string.IsNullOrWhiteSpace(txt_Input.Text))
+                    await SendUserMessage();
+                
             }
         }
     }

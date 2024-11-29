@@ -35,6 +35,7 @@ namespace Rumors.Desktop.Common.Messages.Serialization
         {
             return new Type[] {
                 typeof(SimpleResponseMessage),
+                typeof(ChatMessage)
             };
         }
     }

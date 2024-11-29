@@ -33,7 +33,7 @@ namespace Rumors.Desktop
             services.AddSingleton<IPageNavigator, PageNavigator>();
             services.AddSingleton<IMessageHub, MessageHub>();
             services.AddSingleton<IMessageHandlersList, MessageHandlersList>();
-            services.AddSingleton<ILogNotifier, LogNotifier>();
+            services.AddSingleton<IChatNotifier, LogNotifier>();
 
 
             ServiceProvider = services.BuildServiceProvider();

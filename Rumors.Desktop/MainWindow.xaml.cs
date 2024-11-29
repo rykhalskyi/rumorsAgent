@@ -32,7 +32,7 @@ namespace Rumors.Desktop
             //MainFrame.Navigate(new ProjectListPage());
 
             // ---- PoC ----
-            var logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<ILogNotifier>()!;
+            var logNotifier = ApplicationEntryPoint.ServiceProvider.GetService<IChatNotifier>()!;
             ProgressBarLayer.Visibility = Visibility.Collapsed;
             MainFrame.Navigate(new PoCLandingPage());
             // ---- PoC ----

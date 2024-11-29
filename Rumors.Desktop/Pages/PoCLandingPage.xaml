@@ -27,6 +27,7 @@
         </StackPanel>
         
         <RichTextBox x:Name="logRtichTextBox"
+                     Padding="6"
                      Grid.Row="1"
                      VerticalScrollBarVisibility="Auto"
                      IsReadOnly="True"/>
