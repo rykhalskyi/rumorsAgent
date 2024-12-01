@@ -59,27 +59,27 @@
             this.txt_Chat.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txt_Chat.Location = new System.Drawing.Point(9, 71);
+            this.txt_Chat.Location = new System.Drawing.Point(9, 119);
             this.txt_Chat.Margin = new System.Windows.Forms.Padding(4);
             this.txt_Chat.Multiline = true;
             this.txt_Chat.Name = "txt_Chat";
             this.txt_Chat.ReadOnly = true;
             this.txt_Chat.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.txt_Chat.Size = new System.Drawing.Size(313, 626);
+            this.txt_Chat.Size = new System.Drawing.Size(313, 544);
             this.txt_Chat.TabIndex = 3;
             // 
             // btn_SendMessage
             // 
-            this.btn_SendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_SendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btn_SendMessage.Enabled = false;
-            this.btn_SendMessage.Location = new System.Drawing.Point(269, 20);
+            this.btn_SendMessage.Location = new System.Drawing.Point(267, 669);
             this.btn_SendMessage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_SendMessage.Name = "btn_SendMessage";
             this.btn_SendMessage.Size = new System.Drawing.Size(55, 34);
             this.btn_SendMessage.TabIndex = 2;
-            this.btn_SendMessage.Text = "Send";
+            this.btn_SendMessage.Text = "Clear";
             this.btn_SendMessage.UseVisualStyleBackColor = true;
-            this.btn_SendMessage.Click += new System.EventHandler(this.btn_AskAi_Click);
+            this.btn_SendMessage.Click += new System.EventHandler(this.btn_Clear_Click);
             // 
             // txt_Input
             // 
@@ -87,8 +87,9 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txt_Input.Location = new System.Drawing.Point(8, 30);
             this.txt_Input.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.txt_Input.Multiline = true;
             this.txt_Input.Name = "txt_Input";
-            this.txt_Input.Size = new System.Drawing.Size(255, 22);
+            this.txt_Input.Size = new System.Drawing.Size(314, 83);
             this.txt_Input.TabIndex = 0;
             this.txt_Input.TextChanged += new System.EventHandler(this.txt_Input_TextChanged);
             this.txt_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_Input_KeyDown);

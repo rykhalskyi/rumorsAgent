@@ -32,9 +32,9 @@ namespace Rumors.OutlookClassicAddIn.Panes
         }
 
 
-        private async void btn_AskAi_Click(object sender, EventArgs e)
+        private async void btn_Clear_Click(object sender, EventArgs e)
         {
-            await SendUserMessage();
+            txt_Chat.Text = string.Empty;
         }
 
         private async Task SendUserMessage()

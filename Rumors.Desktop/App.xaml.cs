@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Rumors.Desktop.Agent.Logging;
+using Rumors.Desktop.AiAgent;
 using Rumors.Desktop.Common.Messages.MessageHub;
 using Rumors.Desktop.Common.Pipes;
 using Rumors.Desktop.Logging;
@@ -46,6 +47,8 @@ namespace Rumors.Desktop
             _logger.LogInformation("App started");
         }
 
+        
+
         private void App_DispatcherUnhandledException(object sender, System.Windows.Threading.DispatcherUnhandledExceptionEventArgs e)
         {
             _logger.LogCritical(e.Exception, "Unhandled Exception");
@@ -85,7 +88,11 @@ namespace Rumors.Desktop
                 .CreateLogger();
         }
 
-
+        private async void Application_Exit(object sender, ExitEventArgs e)
+        {
+            var playground = ApplicationEntryPoint.ServiceProvider.GetService<Playground>()!;
+            await playground.DestroyAgent();
+        }
     }
 
 }

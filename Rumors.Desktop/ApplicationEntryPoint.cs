@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Rumors.Desktop.AiAgent;
 using Rumors.Desktop.Common;
 using Rumors.Desktop.Common.Messages.MessageHub;
 using Rumors.Desktop.Common.Messages.Serialization;
@@ -27,7 +28,10 @@ namespace Rumors.Desktop
 
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
-                .AddJsonFile("appsettings.json", false).Build();
+                .AddJsonFile("appsettings.json", false)
+                .AddUserSecrets<Rumors.Desktop.App>()
+                .Build();
+
             services.AddSingleton<IConfiguration>(Configuration);
 
             services.AddTransient<IMessageSerializer, MessageSerializer>();
@@ -36,6 +40,7 @@ namespace Rumors.Desktop
             services.AddSingleton<IMessageHandlersList, MessageHandlersList>();
             services.AddSingleton<IChatNotifier, LogNotifier>();
             services.AddSingleton<PipeClient>(c => new PipeClient(PipeConsts.ReversedPipeName, ex => { }));
+            services.AddSingleton<Playground>(c => new Playground());
 
 
             ServiceProvider = services.BuildServiceProvider();
