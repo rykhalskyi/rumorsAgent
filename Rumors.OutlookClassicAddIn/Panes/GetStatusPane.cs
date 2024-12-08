@@ -67,10 +67,6 @@ namespace Rumors.OutlookClassicAddIn.Panes
             }
         }
 
-        private void txt_Input_TextChanged(object sender, EventArgs e)
-        {
-            btn_SendMessage.Enabled = !string.IsNullOrWhiteSpace(txt_Input.Text);
-        }
 
         private async void txt_Input_KeyDown(object sender, KeyEventArgs e)
         {

@@ -30,7 +30,7 @@
         {
             this.groupBox3 = new System.Windows.Forms.GroupBox();
             this.txt_Chat = new System.Windows.Forms.TextBox();
-            this.btn_SendMessage = new System.Windows.Forms.Button();
+            this.btn_Clear = new System.Windows.Forms.Button();
             this.txt_Input = new System.Windows.Forms.TextBox();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.groupBox3.SuspendLayout();
@@ -42,7 +42,7 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox3.Controls.Add(this.txt_Chat);
-            this.groupBox3.Controls.Add(this.btn_SendMessage);
+            this.groupBox3.Controls.Add(this.btn_Clear);
             this.groupBox3.Controls.Add(this.txt_Input);
             this.groupBox3.Location = new System.Drawing.Point(4, 41);
             this.groupBox3.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
@@ -68,17 +68,17 @@
             this.txt_Chat.Size = new System.Drawing.Size(313, 544);
             this.txt_Chat.TabIndex = 3;
             // 
-            // btn_SendMessage
+            // btn_Clear
             // 
-            this.btn_SendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_SendMessage.Location = new System.Drawing.Point(267, 669);
-            this.btn_SendMessage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
-            this.btn_SendMessage.Name = "btn_SendMessage";
-            this.btn_SendMessage.Size = new System.Drawing.Size(55, 34);
-            this.btn_SendMessage.TabIndex = 2;
-            this.btn_SendMessage.Text = "Clear";
-            this.btn_SendMessage.UseVisualStyleBackColor = true;
-            this.btn_SendMessage.Click += new System.EventHandler(this.btn_Clear_Click);
+            this.btn_Clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.btn_Clear.Location = new System.Drawing.Point(267, 669);
+            this.btn_Clear.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.btn_Clear.Name = "btn_Clear";
+            this.btn_Clear.Size = new System.Drawing.Size(55, 34);
+            this.btn_Clear.TabIndex = 2;
+            this.btn_Clear.Text = "Clear";
+            this.btn_Clear.UseVisualStyleBackColor = true;
+            this.btn_Clear.Click += new System.EventHandler(this.btn_Clear_Click);
             // 
             // txt_Input
             // 
@@ -90,7 +90,6 @@
             this.txt_Input.Name = "txt_Input";
             this.txt_Input.Size = new System.Drawing.Size(314, 83);
             this.txt_Input.TabIndex = 0;
-            this.txt_Input.TextChanged += new System.EventHandler(this.txt_Input_TextChanged);
             this.txt_Input.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txt_Input_KeyDown);
             // 
             // progressBar1
@@ -122,7 +121,7 @@
 
         #endregion
         private System.Windows.Forms.GroupBox groupBox3;
-        private System.Windows.Forms.Button btn_SendMessage;
+        private System.Windows.Forms.Button btn_Clear;
         private System.Windows.Forms.TextBox txt_Input;
         private System.Windows.Forms.TextBox txt_Chat;
         private System.Windows.Forms.ProgressBar progressBar1;
