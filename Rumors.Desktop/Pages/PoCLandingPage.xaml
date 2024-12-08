@@ -30,6 +30,11 @@
                     Margin="10,0"
                     Click="Button_Click_2"
                     />
+            <Button Content="Search"
+                Height="20"
+                Width="50"
+                Click="Button_Click_1"
+                    />
         </StackPanel>
         
         <RichTextBox x:Name="logRtichTextBox"

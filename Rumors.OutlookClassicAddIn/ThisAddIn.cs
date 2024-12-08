@@ -41,6 +41,7 @@ namespace Rumors.OutlookClassicAddIn
             TaskPanes = new TaskPanes();
             MessageHub = new MessageHub(new MessageSerializer());
             MessageHub.AddHandler(new ToolMessageHandler());
+            MessageHub.AddHandler(new SearchMessageHandler());
 
             PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
             _pipeServer = new PipeServer(PipeConsts.ReversedPipeName);

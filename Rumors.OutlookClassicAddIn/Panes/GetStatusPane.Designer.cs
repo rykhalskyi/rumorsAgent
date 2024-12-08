@@ -71,7 +71,6 @@
             // btn_SendMessage
             // 
             this.btn_SendMessage.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.btn_SendMessage.Enabled = false;
             this.btn_SendMessage.Location = new System.Drawing.Point(267, 669);
             this.btn_SendMessage.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.btn_SendMessage.Name = "btn_SendMessage";

@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Rumors.Desktop.Common.Dto;
 using Rumors.Desktop.Common.Messages;
 using Rumors.Desktop.Common.Pipes;
 using Rumors.Desktop.Logging;
@@ -95,6 +96,22 @@ namespace Rumors.Desktop.Pages
             var toolResponse =  _pipeClient.Send(new ToolMessage { Text = "Tool request" });
             if (toolResponse is ToolMessage message)
                 AddLog($"Get tool response: {message.Text}");
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            var search = new SearchDto
+            {
+                Subject = "OpenAi",
+                RecievedAfter = "2024-09-01",
+                ReadStatus = true
+            };
+            var toolResponse = _pipeClient.Send(new SearchMessage {
+                Search = search
+            });
+
+            if (toolResponse is SimpleResponseMessage message)
+                AddLog($"Get tool response: {message.Message}");
         }
     }
 }

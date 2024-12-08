@@ -8,6 +8,8 @@ namespace Rumors.OutlookClassicAddIn.MessageHandlers
     {
         protected override async Task<BaseMessage> Process(ToolMessage message)
         {
+
+
             return await Task.FromResult(new ToolMessage() { Text = "Tool response" });
         }
     }

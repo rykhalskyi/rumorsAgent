@@ -37,7 +37,8 @@ namespace Rumors.Desktop.AiAgent
                         Instructions =
                         """
                         Analyze the available data to provide an answer to the user's question.
-                        If user ask to get emails on some topic, make a serch string and try tu use Email plugin
+                        If user ask to get emails on some topic, make a search string and try tu use Email plugin
+                        if user din't specify where to search, search in subject 
                         """
                     }, new Kernel()
                 );
