@@ -10,7 +10,8 @@ namespace Rumors.OutlookClassicAddIn.MessageHandlers
         protected override async Task<BaseMessage> Process(SearchMessage message)
         {
             var emailSearcher = new EmailSearch();
-            var result = emailSearcher.Search(message.Search);
+            var result = emailSearcher.Search(message.Query);
+
             return await Task.FromResult(new SimpleResponseMessage { Message = result });
         }
     }

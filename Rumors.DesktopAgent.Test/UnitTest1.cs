@@ -1,5 +1,6 @@
 using Rumors.Desktop.Common.Dto;
 using Rumors.OutlookClassicAddIn.emailLogic;
+using System.Reflection;
 
 namespace Rumors.DesktopAgent.Test
 {
@@ -12,42 +13,13 @@ namespace Rumors.DesktopAgent.Test
         }
 
         [Test]
-        public void TestFilter_Should_Create_Correct_Filter_With_Subject()
+        public void SearchFilterShourReplaceAllConstantsCorrectly()
         {
-            var input = new SearchDto
-            {
-                Subject = "Find string"
-            };
+            var query = "[subject] LIKE '%google%' OR [body] LIKE '%google%' AND [sender] Like '%email%' AND [received] < 2022-02-01 AND [status] = true";
 
-            var result = SearchFilter.FromDto(input);
+            var search = SearchFilter.FromString(query);
 
-            Assert.That($"[Subject] LIKE '%{input.Subject}%'", Is.EqualTo(result));
-        }
-
-        [Test]
-        public void TestFilter_Should_Create_Correct_Filter_With_Body()
-        {
-            var input = new SearchDto
-            {
-                Body = "Find string"
-            };
-
-            var result = SearchFilter.FromDto(input);
-
-            Assert.That($"urn:schemas:httpmail:textdescription LIKE '%{input.Body}%'", Is.EqualTo(result));
-        }
-
-        [Test]
-        public void TestFilter_Should_Create_Correct_Filter_With_Sender()
-        {
-            var input = new SearchDto
-            {
-                Sender = "sender@email.com"
-            };
-
-            var result = SearchFilter.FromDto(input);
-
-            Assert.That($"[SenderEmailAddress] = '{input.Sender}'", Is.EqualTo(result));
+            Assert.That(search, Is.EqualTo("@SQL=(urn:schemas:httpmail:subject LIKE '%google%' OR urn:schemas:httpmail:textdescription LIKE '%google%' AND urn:schemas:httpmail:fromemail Like '%email%' AND urn:schemas:httpmail:datereceived < 2022-02-01 AND urn:schemas:httpmail:read = true)"));
         }
     }
 }

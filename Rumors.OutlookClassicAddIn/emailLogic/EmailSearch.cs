@@ -7,9 +7,8 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
 {
     internal class EmailSearch
     {
-        public string Search(SearchDto search)
+        public string Search(string searchQuery)
         {
-
             try
             {
                 var outlookNamespace = Globals.ThisAddIn.Application.GetNamespace("MAPI");
@@ -18,18 +17,18 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                 var items = inbox.Items;
 
                 // Create Filter for Subject Keyword
-                string filter = SearchFilter.FromDto(search);
+                string filter = SearchFilter.FromString(searchQuery);
 
                 var filteredItems = items.Restrict(filter);
 
-                if (filteredItems.Count == 0) 
+                if (filteredItems.Count == 0)
                 {
                     return "Not found";
                 }
 
                 var builder = new StringBuilder();
                 foreach (var item in filteredItems)
-                { 
+                {
                     if (item is MailItem mail)
                     {
                         builder.AppendLine($"Recieved: {mail.ReceivedTime}");
@@ -38,7 +37,7 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                         builder.AppendLine($"Conversation Id: {mail.ConversationID}");
                         builder.AppendLine($"");
                     }
-                    
+
                 }
 
                 return builder.ToString();
@@ -47,7 +46,6 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
             {
                 return ex.ToString();
             }
-
         }
     }
 }

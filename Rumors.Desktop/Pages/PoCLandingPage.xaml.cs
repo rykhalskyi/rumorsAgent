@@ -100,14 +100,9 @@ namespace Rumors.Desktop.Pages
 
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
-            var search = new SearchDto
-            {
-                Subject = "OpenAi",
-                RecievedAfter = "2024-09-01",
-                ReadStatus = true
-            };
+            
             var toolResponse = _pipeClient.Send(new SearchMessage {
-                Search = search
+                Query = "[sender] LIKE '%google%'"
             });
 
             if (toolResponse is SimpleResponseMessage message)
