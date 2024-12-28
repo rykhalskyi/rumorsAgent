@@ -24,7 +24,7 @@ namespace Rumors.Desktop.AiAgent
         {
             var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
             string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
-            string modelName = "gpt-4"; // Specify the model you want to use
+            string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
 
 
             var clientProvider = OpenAIClientProvider.ForOpenAI(new ApiKeyCredential(apiKey));

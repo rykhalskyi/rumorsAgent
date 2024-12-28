@@ -1,5 +1,6 @@
 ﻿using Rumors.Desktop.Common.Messages;
 using System;
+using System.Drawing;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -34,20 +35,47 @@ namespace Rumors.OutlookClassicAddIn.Panes
 
         private async void btn_Clear_Click(object sender, EventArgs e)
         {
-            txt_Chat.Text = string.Empty;
+            richTextBox1.Text = string.Empty;
         }
 
         private async Task SendUserMessage()
         {
+            
             RunSafe(() => progressBar1.Visible = true);
+
             await Task.Run(() =>
             {
-                var response = ThisAddIn.PipeClient.Send(new ChatMessage { Text = txt_Input.Text });
+                var request = txt_Input.Text;
+
+                RunSafe(()=>
+                {
+                    richTextBox1.SelectionColor = Color.Blue;
+                    richTextBox1.SelectionAlignment = HorizontalAlignment.Right;
+                    richTextBox1.AppendText($"[User]: {txt_Input.Text}");
+                    richTextBox1.AppendText($"{Environment.NewLine}");
+                    richTextBox1.AppendText($"{Environment.NewLine}");
+
+                    txt_Input.Text = string.Empty;
+                });
+
+                var response = ThisAddIn.PipeClient.Send(new ChatMessage { Text = request });
                 if (response is ChatMessage message)
                 {
-                    RunSafe(() => { 
-                        txt_Chat.Text = $"[Agent:] {message.Text}{Environment.NewLine}{Environment.NewLine}{txt_Chat.Text}";
-                        txt_Input.Text = string.Empty;
+                    RunSafe(() => {
+                        richTextBox1.SelectionColor = Color.Black;
+                        richTextBox1.SelectionAlignment = HorizontalAlignment.Left;
+                        richTextBox1.AppendText($"[Agent]: {message.Text}");
+                        richTextBox1.AppendText($"{Environment.NewLine}");
+                        richTextBox1.AppendText($"{Environment.NewLine}");
+                    });
+                }
+                else if (response is SimpleResponseMessage errorMessage) {
+                    RunSafe(() => {
+                        richTextBox1.SelectionColor = Color.Red;
+                        richTextBox1.SelectionAlignment = HorizontalAlignment.Left;
+                        richTextBox1.AppendText($"[Error]: {errorMessage.Message}");
+                        richTextBox1.AppendText($"{Environment.NewLine}");
+                        richTextBox1.AppendText($"{Environment.NewLine}");
                     });
                 }
             });
