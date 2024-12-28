@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Rumors.Desktop.Common.Messages.MessageHub
 {
@@ -9,5 +6,7 @@ namespace Rumors.Desktop.Common.Messages.MessageHub
     {
         Task<string> Handle(string message);
         void AddHandler(IMessageHandler handler);
+
+        IMessageHub With(IMessageHandler handler);
     }
 }

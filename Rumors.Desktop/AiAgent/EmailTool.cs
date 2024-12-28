@@ -1,9 +1,12 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
+using Rumors.Desktop.Common.Dto;
 using Rumors.Desktop.Common.Messages;
 using Rumors.Desktop.Common.Pipes;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Rumors.Desktop.AiAgent
 {
@@ -32,6 +35,24 @@ namespace Rumors.Desktop.AiAgent
             {
                 Debug.WriteLine($"Response: {message.Message}");
                 return message.Message;
+            }
+
+            return "Error occured. Wrong response message type";
+        }
+
+        [KernelFunction("get_email_chain")]
+        [Description("Retrieves email chain (conversation). This chain can be used as history of topic of conversation" +
+            "input arguments: emailId - ID of email, whise chain should be retrieved")]
+        [return: Description("json of whole conversation whit contains emails chain as array")]
+        public string GetEmailChain(string emailId)
+        {
+            var pipeClient = ApplicationEntryPoint.ServiceProvider.GetService<PipeClient>()!;
+            var response = pipeClient.Send(new GetConversationMessage { EmailEntityId = emailId });
+            if (response is GetConversationMessage message)
+            {
+                var serialized = JsonSerializer.Serialize(message.Conversation);
+                Debug.WriteLine($"** >> {serialized}");
+                return serialized;
             }
 
             return "Error occured. Wrong response message type";

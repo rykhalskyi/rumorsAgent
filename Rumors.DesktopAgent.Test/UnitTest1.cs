@@ -1,6 +1,4 @@
-using Rumors.Desktop.Common.Dto;
 using Rumors.OutlookClassicAddIn.emailLogic;
-using System.Reflection;
 
 namespace Rumors.DesktopAgent.Test
 {

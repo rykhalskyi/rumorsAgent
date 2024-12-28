@@ -38,7 +38,8 @@ namespace Rumors.Desktop.AiAgent
                         """
                         Analyze the available data to provide an answer to the user's question.
                         If user ask to get emails on some topic, make a search string and try tu use Email plugin
-                        if user din't specify where to search, search in subject 
+                        if user din't specify where to search, search in subject and body as well.
+                        display emails chain as a list and a short story too.
                         """
                     }, new Kernel()
                 );

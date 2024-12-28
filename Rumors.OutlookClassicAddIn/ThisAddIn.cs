@@ -6,25 +6,21 @@ using Rumors.Desktop.Common.Pipes;
 using Microsoft.Extensions.Configuration;
 using Serilog;
 using System;
-using System.Windows;
 using System.Threading.Tasks;
 using System.Threading;
-using Serilog.Core;
-using System.Windows.Forms;
 using Microsoft.Extensions.Logging;
 using Rumors.OutlookClassicAddIn.MessageHandlers;
-
 
 
 namespace Rumors.OutlookClassicAddIn
 {
     public partial class ThisAddIn
     {
-        public IMessageHub MessageHub { get; private set; }
         public static TaskPanes TaskPanes { get; private set; }
         public static RumorsRibbon Ribbon { get; private set; }
         public static PipeClient PipeClient { get; private set; }
 
+        private IMessageHub _messageHub;
         private static PipeServer _pipeServer;
         private CancellationTokenSource _cts = new CancellationTokenSource();
 
@@ -39,9 +35,10 @@ namespace Rumors.OutlookClassicAddIn
             TaskScheduler.UnobservedTaskException += TaskScheduler_UnobservedTaskException;
 
             TaskPanes = new TaskPanes();
-            MessageHub = new MessageHub(new MessageSerializer());
-            MessageHub.AddHandler(new ToolMessageHandler());
-            MessageHub.AddHandler(new SearchMessageHandler());
+            _messageHub = MessageHub.Create(new MessageSerializer())
+                      .With(new ToolMessageHandler())
+                      .With(new SearchMessageHandler())
+                      .With(new GetConversationMessageHandler());
 
             PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
             _pipeServer = new PipeServer(PipeConsts.ReversedPipeName);
@@ -50,7 +47,7 @@ namespace Rumors.OutlookClassicAddIn
 
         private async Task<string> OnMessage(string message)
         {
-            return await MessageHub.Handle(message);
+            return await _messageHub.Handle(message);
         }
 
         private void TaskScheduler_UnobservedTaskException(object sender, UnobservedTaskExceptionEventArgs e)

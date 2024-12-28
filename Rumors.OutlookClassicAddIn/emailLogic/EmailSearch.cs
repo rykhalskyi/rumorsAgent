@@ -1,6 +1,5 @@
 ﻿using Microsoft.Office.Interop.Outlook;
-using Rumors.Desktop.Common.Dto;
-using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace Rumors.OutlookClassicAddIn.emailLogic
@@ -26,15 +25,23 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                     return "Not found";
                 }
 
+                var usedConversation = new Dictionary<string, string>();
+
                 var builder = new StringBuilder();
                 foreach (var item in filteredItems)
                 {
+                    
                     if (item is MailItem mail)
                     {
+                        if (usedConversation.ContainsKey(mail.ConversationID)) continue;
+
+                        usedConversation[mail.ConversationID] = mail.EntryID;
+
                         builder.AppendLine($"Recieved: {mail.ReceivedTime}");
                         builder.AppendLine($"From: {mail.Sender.Address}");
                         builder.AppendLine($"Subject: {mail.Subject}");
                         builder.AppendLine($"Conversation Id: {mail.ConversationID}");
+                        builder.AppendLine($"Email Id: {mail.EntryID}");
                         builder.AppendLine($"");
                     }
 

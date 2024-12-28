@@ -58,10 +58,12 @@ namespace Rumors.Desktop.Pages
             RunSafe(() =>
             {
                 var caption = new Bold(new Run("[User]: "));
+                var dateRun = new Italic(new Run($"{DateTime.Now.ToString("T")}: "));
                 var run = new Run(message);
 
                 var paragraph = new Paragraph() { TextAlignment = System.Windows.TextAlignment.Right };
                 paragraph.Inlines.Add(caption);
+                paragraph.Inlines.Add(dateRun);
                 paragraph.Inlines.Add(new Run(message));
                 logRtichTextBox.Document.Blocks.Add(paragraph);
             });
@@ -72,10 +74,12 @@ namespace Rumors.Desktop.Pages
             RunSafe(() =>
             {
                 var caption = new Bold(new Run("[Agent]: "));
+                var dateRun = new Italic(new Run($"{DateTime.Now.ToString("T")}: "));
                 var run = new Run(message);
 
                 var paragraph = new Paragraph() { TextAlignment = System.Windows.TextAlignment.Left };
                 paragraph.Inlines.Add(caption);
+                paragraph.Inlines.Add(dateRun);
                 paragraph.Inlines.Add(new Run(message));
                 logRtichTextBox.Document.Blocks.Add(paragraph);
             });

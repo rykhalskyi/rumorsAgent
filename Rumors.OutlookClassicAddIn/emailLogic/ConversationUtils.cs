@@ -6,7 +6,7 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
 {
     internal class ConversationUtils
     {
-        public static ConversationDto GetConversation(MailItem mailItem)
+        public static ConversationDto GetConversation(MailItem mailItem, bool useImages = false)
         {
             var result = new List<MailItemDto>();
             var conversation = mailItem.GetConversation();
@@ -16,10 +16,11 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                 if (item is MailItem rootMailItem)
                 {
                     var newItem = rootMailItem.ToDto();
-                    newItem.Attachments = EmailUtils.ExtractImages(rootMailItem);
+                    if (useImages)
+                        newItem.Attachments = EmailUtils.ExtractImages(rootMailItem);
 
                     result.Add(newItem);
-                    GetChildEntryIds(conversation, rootMailItem, result);
+                    GetChildEntryIds(conversation, rootMailItem, result, useImages);
                 }
             }
 
@@ -30,7 +31,7 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
             };
         }
 
-        private static void GetChildEntryIds(Conversation conversation, MailItem parentMailItem, List<MailItemDto> emailEntryIds)
+        private static void GetChildEntryIds(Conversation conversation, MailItem parentMailItem, List<MailItemDto> emailEntryIds, bool useImages = false)
         {
             var children = conversation.GetChildren(parentMailItem);
 
@@ -39,11 +40,12 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                 if (childItemObj is MailItem childMailItem)
                 {
                     var newItem = childMailItem.ToDto();
-                    newItem.Attachments = EmailUtils.ExtractImages(childMailItem);
+                    if (useImages)
+                        newItem.Attachments = EmailUtils.ExtractImages(childMailItem);
 
                     emailEntryIds.Add(newItem);
 
-                    GetChildEntryIds(conversation, childMailItem, emailEntryIds);
+                    GetChildEntryIds(conversation, childMailItem, emailEntryIds, useImages);
                 }
             }
         }

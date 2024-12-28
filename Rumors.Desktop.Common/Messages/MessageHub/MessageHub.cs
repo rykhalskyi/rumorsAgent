@@ -17,7 +17,11 @@ namespace Rumors.Desktop.Common.Messages.MessageHub
         {
             _messageSerializer = messageSerializer;
         }
-                
+               
+        public static IMessageHub Create(IMessageSerializer messageSerializer)
+        {
+            return new MessageHub(messageSerializer);
+        }
 
         public void AddHandler(IMessageHandler handler)
         {
@@ -37,6 +41,12 @@ namespace Rumors.Desktop.Common.Messages.MessageHub
             }
 
             return await HandleInternal(deserializedMessage);
+        }
+
+        public IMessageHub With(IMessageHandler handler)
+        {
+            AddHandler(handler);
+            return this;
         }
 
         private async Task<string> HandleInternal(BaseMessage message)
