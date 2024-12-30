@@ -13,7 +13,7 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
                 CreationTime = mailItem.CreationTime,
                 From = mailItem.SenderEmailAddress,
                 Subject = mailItem.Subject,
-                Body = EmailUtils.CleanEmailText(mailItem.Body),
+                Body = mailItem.Body,
                 Person = new PersonDto
                 {
                     Email = mailItem.SenderEmailAddress,

@@ -38,7 +38,8 @@ namespace Rumors.OutlookClassicAddIn
             _messageHub = MessageHub.Create(new MessageSerializer())
                       .With(new ToolMessageHandler())
                       .With(new SearchMessageHandler())
-                      .With(new GetConversationMessageHandler());
+                      .With(new GetConversationMessageHandler())
+                      .With(new OpenEmailMessageHandler());
 
             PipeClient = new PipeClient(PipeConsts.PipeName, ex => { });
             _pipeServer = new PipeServer(PipeConsts.ReversedPipeName);

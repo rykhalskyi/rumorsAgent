@@ -38,7 +38,8 @@ namespace Rumors.Desktop.Common.Messages.Serialization
                 typeof(ChatMessage),
                 typeof(ToolMessage),
                 typeof(SearchMessage),
-                typeof(GetConversationMessage)
+                typeof(GetConversationMessage),
+                typeof(OpenEmailMessage)
             };
         }
     }

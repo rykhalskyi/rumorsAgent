@@ -312,6 +312,7 @@
     <Compile Include="emailLogic\ToDtoConverter.cs" />
     <Compile Include="etc\EmailTaskPaneStatus.cs" />
     <Compile Include="MessageHandlers\GetConversationMessageHandler.cs" />
+    <Compile Include="MessageHandlers\OpenEmailMessageHandler.cs" />
     <Compile Include="MessageHandlers\SearchMessageHandler.cs" />
     <Compile Include="MessageHandlers\ToolMessageHandler.cs" />
     <Compile Include="Panes\BasePaneUserControl.cs">

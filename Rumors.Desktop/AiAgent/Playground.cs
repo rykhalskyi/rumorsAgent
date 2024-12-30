@@ -24,7 +24,8 @@ namespace Rumors.Desktop.AiAgent
         {
             var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
             string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
-            string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
+            //string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
+            string modelName = "gpt-4"; // Specify the model you want to use
 
 
             var clientProvider = OpenAIClientProvider.ForOpenAI(new ApiKeyCredential(apiKey));
@@ -36,10 +37,10 @@ namespace Rumors.Desktop.AiAgent
                         Name = "AssistantAgent",
                         Instructions =
                         """
-                        Analyze the available data to provide an answer to the user's question.
-                        If user ask to get emails on some topic, make a search string and try tu use Email plugin
-                        if user din't specify where to search, search in subject and body as well.
-                        display emails chain as a list and a short story too.
+                        Retrieved email body can contain embeded chain.
+                        As an assistant, when processing email chains or conversations, you should first retrieve the emails in the chain using the available functions. if user din't specify where to search, search in subject and body as well. After retrieving the chain, review each email and clean up any unnecessary content like repeated greetings, signatures, or redundant trailing email threads. 
+                        Make sure to maintain the main body of each email with all the important information intact. Present the email chain in chronological order, starting from the earliest to the latest email. Provide details such as the sender, receiver, date, and time of each email. Also, if the chain later gets forwarded as a whole to another recipient, include this information at the end. 
+                        The eventual goal is to present a clear and concise view of the whole conversation for easy understanding and reference
                         """
                     }, new Kernel()
                 );
