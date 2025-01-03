@@ -26,7 +26,7 @@ namespace Rumors.OutlookClassicAddIn.emailLogic
 
             return new ConversationDto
             {
-                Id = conversation.ConversationID,
+                ConversationId = conversation.ConversationID,
                 Emails = result.ToArray(),
             };
         }

@@ -3,7 +3,7 @@ namespace Rumors.Desktop.Common.Dto
 {
     public class ConversationDto
     {
-        public string Id { get; set; }
+        public string ConversationId { get; set; }
         public MailItemDto[] Emails { get; set; }
     }
 }
