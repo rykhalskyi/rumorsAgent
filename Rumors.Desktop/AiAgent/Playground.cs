@@ -8,7 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Rumors.Desktop.AiAgent
 {
-    public class Playground
+    public class Playground : IAiAssistant
     {
 #pragma warning disable SKEXP0110 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
 
@@ -24,7 +24,7 @@ namespace Rumors.Desktop.AiAgent
         {
             var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
             string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
-           // string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
+                                                        // string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
             string modelName = "gpt-4"; // Specify the model you want to use
 
 
@@ -38,7 +38,8 @@ namespace Rumors.Desktop.AiAgent
                         Instructions =
                         """
                         As an email assistant, when processing email chains or conversations, you should first retrieve the emails in the chain using the available functions. 
-                        if user didn't specify where to search, search in subject and body as well. After retrieving the chain, review each email and clean up any unnecessary and redundant content like repeated greetings, signatures, or redundant trailing email threads. 
+                        if user didn't specify where to search, search in subject and body as well. If there's no chain, try to parse emails body and present it like a chain if possible. 
+                        After retrieving the chain, review each email and clean up any unnecessary and redundant content like repeated greetings, signatures, or redundant trailing email threads. 
                         Make sure to maintain the main body of each email with all the important information intact. Present the email chain in chronological order, starting from the earliest to the latest email. 
                         Provide details such as the sender, receiver, date, and time of each email. Also, if the chain later gets forwarded as a whole to another recipient, include this information at the end. 
                         The eventual goal is to present a clear and concise view of the whole conversation for easy understanding and reference.
@@ -55,7 +56,7 @@ namespace Rumors.Desktop.AiAgent
         public async Task<string> Chat(string input)
         {
             if (_agent == null) throw new InvalidOperationException("Agent has not been created. Call CreateAgent");
-              
+
             await _agent.AddChatMessageAsync(_threadId, new ChatMessageContent(AuthorRole.User, input));
 
             List<StreamingAnnotationContent> footnotes = [];
@@ -69,7 +70,7 @@ namespace Rumors.Desktop.AiAgent
                 sb.Append(chunk.Content);
             }
 
-            return sb.ToString();   
+            return sb.ToString();
         }
 
         public async Task DestroyAgent()

@@ -8,18 +8,18 @@ namespace Rumors.Desktop.MessageHandlers
     {
         private readonly IMessageHub _messageHub;
         private readonly IChatNotifier _chatNotifier;
-        private readonly Playground _playground;
+        private readonly IAiAssistant _aiAssistent;
 
-        public MessageHandlersList(IMessageHub messageHub, IChatNotifier chatNotifier, Playground playground)
+        public MessageHandlersList(IMessageHub messageHub, IChatNotifier chatNotifier, IAiAssistant aiAssistent)
         {
             _messageHub = messageHub;
             _chatNotifier = chatNotifier;
-            _playground = playground;
+            _aiAssistent = aiAssistent;
         }
 
         public void Initialize()
         {
-            _messageHub.AddHandler(new ChatMessageHandler(_chatNotifier, _playground));
+            _messageHub.AddHandler(new ChatMessageHandler(_chatNotifier, _aiAssistent));
         }
     }
 }

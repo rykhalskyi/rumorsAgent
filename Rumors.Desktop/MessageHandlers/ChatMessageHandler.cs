@@ -8,17 +8,17 @@ namespace Rumors.Desktop.MessageHandlers
     internal class ChatMessageHandler : BaseMessageHandler<ChatMessage>
     {
         private readonly IChatNotifier _chatNotifier;
-        private readonly Playground _playground;
+        private readonly IAiAssistant _aiAssistant;
 
-        public ChatMessageHandler(IChatNotifier chatNotifier, Playground playground)
+        public ChatMessageHandler(IChatNotifier chatNotifier, IAiAssistant aiAssistant)
         {
             _chatNotifier = chatNotifier;
-            _playground = playground;
+            _aiAssistant = aiAssistant;
         }
         protected async override Task<BaseMessage> Process(ChatMessage message)
         {
             _chatNotifier.RaiseOnUserMessage(message.Text);
-            var aiResponse = await _playground.Chat(message.Text);
+            var aiResponse = await _aiAssistant.Chat(message.Text);
 
             var response = new ChatMessage() { Text = aiResponse };
             _chatNotifier.RaiseOnAgentMessage(response.Text);
