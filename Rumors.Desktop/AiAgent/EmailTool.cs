@@ -31,8 +31,6 @@ namespace Rumors.Desktop.AiAgent
         {
             var pipeClient = ApplicationEntryPoint.ServiceProvider.GetService<PipeClient>()!;
 
-            Debug.WriteLine($"LLM query: {searchQuery}");
-
             var response = pipeClient.Send(new SearchMessage { Query = searchQuery });
             if (response is SimpleResponseMessage message)
             {

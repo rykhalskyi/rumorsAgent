@@ -14,25 +14,31 @@ namespace Rumors.Desktop.AiAgent
 
         private OpenAIAssistantAgent? _agent = null!;
         private string _threadId = string.Empty;
+        private readonly OpenAIClientProvider _clientProvider;
+        private string _agentName;
+
+        private const string Model = "gpt-4"; //"gpt-3.5-turbo"
+
 
         public Playground()
         {
-            CreateAgent();
+            _clientProvider = InitializeProvider();
         }
 
-        private async void CreateAgent()
+        private OpenAIClientProvider InitializeProvider()
         {
             var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
-            string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
-                                                        // string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
-            string modelName = "gpt-4"; // Specify the model you want to use
+            string apiKey = configuration["OpenAIKey"]; 
+            _agentName = configuration["OpenAiAgentName"];
 
+            return OpenAIClientProvider.ForOpenAI(new ApiKeyCredential(apiKey));
+        }
 
-            var clientProvider = OpenAIClientProvider.ForOpenAI(new ApiKeyCredential(apiKey));
-
+        private async Task CreateAgent()
+        {
             _agent = await OpenAIAssistantAgent.CreateAsync(
-                    clientProvider,
-                    new OpenAIAssistantDefinition(modelName)
+                    _clientProvider,
+                    new OpenAIAssistantDefinition(Model)
                     {
                         Name = "EmailAssistantAgent",
                         Instructions =
@@ -51,11 +57,36 @@ namespace Rumors.Desktop.AiAgent
             _agent.Kernel.Plugins.AddFromType<EmailTool>("Emails");
             _threadId = await _agent.CreateThreadAsync();
 
-
+            _agentName = _agent.Name ?? "";
         }
+
+        private async Task<bool> LoadAgent(string agentName)
+        {
+            IKernelBuilder builder = Kernel.CreateBuilder();
+            var kernel = builder.Build();
+
+            try
+            {
+                _agent = await OpenAIAssistantAgent.RetrieveAsync(_clientProvider, agentName, kernel);
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            _agent.Kernel.Plugins.AddFromType<EmailTool>("Emails");
+            _threadId = await _agent.CreateThreadAsync();
+
+            return true;
+        }
+
         public async Task<string> Chat(string input)
         {
-            if (_agent == null) throw new InvalidOperationException("Agent has not been created. Call CreateAgent");
+            if (_agent == null && !await LoadAgent(_agentName)) await CreateAgent();
+
+
+            if (_agent == null) 
+                throw new InvalidOperationException("Agent has not been created. Call CreateAgent");
 
             await _agent.AddChatMessageAsync(_threadId, new ChatMessageContent(AuthorRole.User, input));
 
