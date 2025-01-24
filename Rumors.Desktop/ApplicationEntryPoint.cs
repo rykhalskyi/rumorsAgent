@@ -40,8 +40,8 @@ namespace Rumors.Desktop
             services.AddSingleton<IMessageHandlersList, MessageHandlersList>();
             services.AddSingleton<IChatNotifier, LogNotifier>();
             services.AddSingleton<PipeClient>(c => new PipeClient(PipeConsts.ReversedPipeName, ex => { }));
-            services.AddSingleton<IAiAssistant, Playground>();
-            //services.AddSingleton<IAiAssistant, GroupChat>();
+           // services.AddSingleton<IAiAssistant, Playground>();
+            services.AddSingleton<IAiAssistant, GroupChat>();
 
 
             ServiceProvider = services.BuildServiceProvider();

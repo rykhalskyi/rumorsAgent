@@ -2,9 +2,9 @@
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.SemanticKernel;
 using Microsoft.SemanticKernel.Agents;
-using Microsoft.SemanticKernel.Agents.OpenAI;
 using Microsoft.SemanticKernel.ChatCompletion;
-using System.ClientModel;
+using Microsoft.SemanticKernel.Connectors.OpenAI;
+using Rumors.Desktop.Logging;
 using System.Diagnostics;
 using System.Text;
 
@@ -14,42 +14,55 @@ namespace Rumors.Desktop.AiAgent
 #pragma warning disable SKEXP0001 // Type is for evaluation purposes only and is subject to change or removal in future updates. Suppress this diagnostic to proceed.
     internal class GroupChat : IAiAssistant
     {
-        private OpenAIAssistantAgent _writerAgent = null!;
-        private ChatCompletionAgent _reviewerAgent = null!;
-        private AgentGroupChat _chat = null!;
+        private ChatCompletionAgent _emailAssistant = null!;
+        private ChatCompletionAgent _reviewer = null!;
 
+        private const string Model = "gpt-3.5-turbo";
+        private readonly IChatNotifier _chatNotifier;
+        private List<ChatMessageContent> _history = new List<ChatMessageContent>();
+
+        public GroupChat(IChatNotifier chatNotifier)
+        {
+            _chatNotifier = chatNotifier;
+        }
 
         public async Task<string> Chat(string input)
         {
-            _chat ??= await CreateChat();
+            var chat = await CreateChat();
 
             var userMessage = new ChatMessageContent(AuthorRole.User, input);
-            _chat.AddChatMessage(userMessage);
+            
+            chat.AddChatMessages(_history);
+            chat.AddChatMessage(userMessage);
 
             var sb = new StringBuilder();
-            await foreach (ChatMessageContent response in _chat.InvokeAsync())
+            await foreach (ChatMessageContent response in chat.InvokeAsync())
             {
                 sb.AppendLine($"[{response.Role}{response.AuthorName}] - {response.Content}");
-                Debug.WriteLine($"[{response.Role}{response.AuthorName}] - {response.Content}");
             }
 
+            var history =  await chat.GetChatMessagesAsync().ToListAsync();
+            history.Reverse();
+            _history.AddRange(history);
 
+            //Add some logic to trim a history. pay attension on tool messages after trimming
+            
             return sb.ToString();
         }
 
         private async Task<AgentGroupChat> CreateChat()
         {
             
-            (_writerAgent, _reviewerAgent) = await CreateAgents();
+            (_emailAssistant, _reviewer) = await CreateAgents();
 
-            var chat = new AgentGroupChat(_writerAgent, _reviewerAgent)
+            var chat = new AgentGroupChat(_emailAssistant, _reviewer)
             {
                 ExecutionSettings = new()
                 {
                     TerminationStrategy = new ApprovalTerminationStrategy()
                     {
                         // Only the art-director may approve.
-                        Agents = [_reviewerAgent],
+                        Agents = [_reviewer],
                         // Limit total number of turns
                         MaximumIterations = 6,
                     }
@@ -59,65 +72,64 @@ namespace Rumors.Desktop.AiAgent
             return chat;
         }
 
-        private async Task<(OpenAIAssistantAgent, ChatCompletionAgent)> CreateAgents()
+        private async Task<(ChatCompletionAgent, ChatCompletionAgent)> CreateAgents()
         {
-            var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
-            string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
-            string modelName = "gpt-3.5-turbo"; // Specify the model you want to use
-           // string modelName = "gpt-4"; // Specify the model you want to use
-            var clientProvider = OpenAIClientProvider.ForOpenAI(new ApiKeyCredential(apiKey));
+            ChatCompletionAgent writerAgent = new() {
+                Name = "EmailAssistant",
+                Instructions = """
+                        You have tools to search through users email, retrieve email chains and save them. Thats your job. You work pn user demand.
+                        if user didn't specify where to search, search in subject and body as well. If there's no explicit chain, try to parse emails body and present it like a chain if it's possible. 
+                        To find email use "search_for_emails", to get its chain "get_email_chain" mongo db for save only
+                        
+                        The email chain MUST meet conditions:
+                         - Each email in the list MUST contain with the sender, receiver, date, time and the body of each email.
+                         - Chain is well formed numered list and contain NO redundant information such as: threads, copies, inline appended, forwarded emails in the emails body.
+                         - Inportantinformation MUST NOT be lost
 
-            var writerAgent = await OpenAIAssistantAgent.CreateAsync(
-                  clientProvider,
-                  new OpenAIAssistantDefinition(modelName)
-                  {
-                      Name = "EmailAssistantAgent",
-                      Instructions =
-                      """
-                        As an email assistant, which process email chains. Your job - find emails, retrive, arrange, cleanup and save their chains. using the available functions. 
-                        if user didn't specify where to search, search in subject and body as well. After retrieving the chain, review each email and clean up any unnecessary and redundant content like repeated greetings, signatures, or redundant trailing email threads. 
-                        Make sure to maintain the main body of each email with all the important information intact. Present the email chain in chronological order, starting from the earliest to the latest email. 
-                        Provide details such as the sender, receiver, date, and time of each email. Also, if the chain later gets forwarded as a whole to another recipient, include this information at the end. 
-                        The eventual goal is to present a clear and concise view of the whole conversation for easy understanding and reference.
-                        If user asks to save chain, save it from results you got. 
-                        """
-                  }, new Kernel()
-              );
+                         if you preperead a chain ask Reviewer to approve it. Only User can ask explicitly to save email chain.
+                        """,
+                Kernel = CreateKernel(),
+                Arguments = new KernelArguments(new OpenAIPromptExecutionSettings() {FunctionChoiceBehavior = FunctionChoiceBehavior.Auto()})
+            };
+              
             writerAgent.Kernel.Plugins.AddFromType<EmailTool>("Emails");
 
-            IKernelBuilder builder = Kernel.CreateBuilder();
-            builder.AddOpenAIChatCompletion(modelName, apiKey);
-            var kernel = builder.Build();
-
-            var reviewerAgent =
-                  new ChatCompletionAgent()
-                    {
-                        Name = "ReviewerAgent",
+            ChatCompletionAgent reviewerAgent = new(){
+                        Name = "Reviewer",
                         Instructions = """
-                        You are QA agent, you review result of EmailAssistant. 
-                        If Email assistant performs find email, ask him to find email chain from this email too. Let him search in chain and in the emails body as well.
-                        It should be well formed list with the sender, receiver, date, time and the body of each email.
-                        There shoud'n be redundant information, threads, copies, inline appended emails in the body.
-                        if you have some objections and remarks tell them EmailAssistant agent. Response Approve if you approve email chain.
-                        if Agent says there's no chain ask him once again to parse emails body ant extract a chain from it if possible
+                        If Email Assistant asks you to review his result, review it.
+                        
+                        Response 'Approve' ONLY if Email agent responds woth chain AND contidions are met:
+                         - Each email in the list MUST contain with the sender, receiver, date, time and the body of each email.
+                         - Chain is well formed numered list and contain NO redundant information such as: threads, copies, inline appended, forwarded emails in the emails body.
+                         - Inportantinformation MUST NOT be lost
+
+                        If these conditionds are not met, respomse with these conditionsand ask to fixthe chain. 
+                        if EmailAssistant says there's no chain or there are forwarded messages in emails body, ask him once again to parse emails body ant extract a chain list from that messages
                         """,
-                        Kernel = kernel
+                        Kernel = CreateKernel()
                     };
             
-
             return (writerAgent, reviewerAgent);
         }
 
         public async Task DestroyAgent()
         {
+           //Not applicible to chatComplition
+        }
 
-            if (_writerAgent != null)
-            {
-                await _writerAgent.DeleteAsync();
-         
-            }
+        private Kernel CreateKernel()
+        {
+            var configuration = ApplicationEntryPoint.ServiceProvider.GetService<IConfiguration>()!;
+            string apiKey = configuration["OpenAIKey"]; // Replace with your OpenAI API key
 
-     
+            var builder = Kernel.CreateBuilder();
+            builder.AddOpenAIChatCompletion(
+                Model,
+                apiKey
+                );
+
+            return builder.Build();
         }
 
     }
