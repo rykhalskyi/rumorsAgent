@@ -5,7 +5,6 @@ using Microsoft.SemanticKernel.Agents;
 using Microsoft.SemanticKernel.ChatCompletion;
 using Microsoft.SemanticKernel.Connectors.OpenAI;
 using Rumors.Desktop.Logging;
-using System.Diagnostics;
 using System.Text;
 
 namespace Rumors.Desktop.AiAgent
@@ -46,7 +45,8 @@ namespace Rumors.Desktop.AiAgent
             _history.AddRange(history);
 
             //Add some logic to trim a history. pay attension on tool messages after trimming
-            
+            TrimHistory(10);
+
             return sb.ToString();
         }
 
@@ -77,7 +77,7 @@ namespace Rumors.Desktop.AiAgent
             ChatCompletionAgent writerAgent = new() {
                 Name = "EmailAssistant",
                 Instructions = """
-                        You have tools to search through users email, retrieve email chains and save them. Thats your job. You work pn user demand.
+                        Act like personal assistant for email search and chain extraction.
                         if user didn't specify where to search, search in subject and body as well. If there's no explicit chain, try to parse emails body and present it like a chain if it's possible. 
                         To find email use "search_for_emails", to get its chain "get_email_chain" mongo db for save only
                         
@@ -97,9 +97,9 @@ namespace Rumors.Desktop.AiAgent
             ChatCompletionAgent reviewerAgent = new(){
                         Name = "Reviewer",
                         Instructions = """
-                        If Email Assistant asks you to review his result, review it.
+                        Act like reviewer for EmailAssistant. Check if result meet conditions and approve it.
                         
-                        Response 'Approve' ONLY if Email agent responds woth chain AND contidions are met:
+                        Response 'Approve' ONLY if Email agent responds with chain AND contidions are met:
                          - Each email in the list MUST contain with the sender, receiver, date, time and the body of each email.
                          - Chain is well formed numered list and contain NO redundant information such as: threads, copies, inline appended, forwarded emails in the emails body.
                          - Inportantinformation MUST NOT be lost
@@ -130,6 +130,20 @@ namespace Rumors.Desktop.AiAgent
                 );
 
             return builder.Build();
+        }
+
+        private void TrimHistory(int maxLenght)
+        {
+            if (_history.Count() <= maxLenght) return;
+
+            var toRemove = _history.Count - maxLenght;
+
+            _history = _history.Skip(toRemove).ToList();
+            while (_history[0].Role.Label.Equals("tool") && _history.Count>1)
+            {
+                _history = _history.Skip(1).ToList();
+            }
+            //Add some logic to trim a history. pay attension on tool messages after trimming
         }
 
     }
