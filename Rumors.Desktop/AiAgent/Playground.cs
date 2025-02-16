@@ -17,7 +17,7 @@ namespace Rumors.Desktop.AiAgent
         private readonly OpenAIClientProvider _clientProvider;
         private string _agentName;
 
-        private const string Model = "gpt-4"; //"gpt-3.5-turbo"
+        private const string Model = "gpt-4o-mini";//"gpt-4"; //"gpt-3.5-turbo"
 
 
         public Playground()

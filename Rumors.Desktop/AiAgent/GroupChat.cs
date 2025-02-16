@@ -16,7 +16,7 @@ namespace Rumors.Desktop.AiAgent
         private ChatCompletionAgent _emailAssistant = null!;
         private ChatCompletionAgent _reviewer = null!;
 
-        private const string Model = "gpt-3.5-turbo";
+        private const string Model = "gpt-4o-mini";//"gpt-3.5-turbo";
         private readonly IChatNotifier _chatNotifier;
         private List<ChatMessageContent> _history = new List<ChatMessageContent>();
 

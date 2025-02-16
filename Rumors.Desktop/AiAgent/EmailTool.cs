@@ -59,21 +59,21 @@ namespace Rumors.Desktop.AiAgent
             return "Error occured. Wrong response message type";
         }
 
-        //[KernelFunction("open_email")]
-        //[Description("opens email with specific emailId in the outlook"+
-        //    "input argument: emailId Id of the email")]
-        //[return: Description("string with execution result. don't show it to user unless it's an error")]
-        //public string OpenEmail(string emailId)
-        //{
-        //    var pipeClient = ApplicationEntryPoint.ServiceProvider.GetService<PipeClient>()!;
-        //    var response = pipeClient.Send(new OpenEmailMessage { EmailId = emailId });
-        //    if (response is SimpleResponseMessage message)
-        //    {
-        //        return message.Message;
-        //    }
+        [KernelFunction("open_email")]
+        [Description("opens email with specific emailId in the outlook" +
+            "input argument: emailId Id of the email")]
+        [return: Description("string with execution result. don't show it to user unless it's an error")]
+        public string OpenEmail(string emailId)
+        {
+            var pipeClient = ApplicationEntryPoint.ServiceProvider.GetService<PipeClient>()!;
+            var response = pipeClient.Send(new OpenEmailMessage { EmailId = emailId });
+            if (response is SimpleResponseMessage message)
+            {
+                return message.Message;
+            }
 
-        //    return "Error occured. Wrong response message type";
-        //}
+            return "Error occured. Wrong response message type";
+        }
 
         [KernelFunction("save_email_chain")]
         [Description("Save email chain (conversation) to the storage" +
